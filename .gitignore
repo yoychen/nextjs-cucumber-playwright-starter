@@ -42,4 +42,11 @@ next-env.d.ts
 
 # coverage
 /.nyc_output/
-/reports/coverage/
+/reports/
+
+# playwright
+/test-results/
+/playwright-report/
+
+# claude
+.claude/
