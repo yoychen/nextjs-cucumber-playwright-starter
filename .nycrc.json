@@ -1,0 +1,8 @@
+{
+  "reporter": ["html", "lcov", "text-summary"],
+  "report-dir": "reports/coverage",
+  "temp-dir": ".nyc_output",
+  "instrument": false,
+  "source-map": false,
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

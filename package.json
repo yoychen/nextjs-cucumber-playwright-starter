@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:cucumber": "NODE_OPTIONS='--import tsx' cucumber-js",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report reports/playwright-report",
+    "test": "npm run test:cucumber && npm run test:e2e",
+    "test:cucumber:withserver": "start-server-and-test 'next dev --webpack' http://localhost:3000 test:cucumber",
+    "coverage:report": "nyc report",
+    "coverage:clean": "rm -rf .nyc_output reports/coverage"
   },
   "dependencies": {
     "next": "16.2.2",
@@ -14,13 +22,20 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^12.7.0",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "babel-plugin-istanbul": "^7.0.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
+    "nyc": "^18.0.0",
+    "start-server-and-test": "^2.1.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.21.0",
+    "typescript": "^5",
+    "v8-to-istanbul": "^9.3.0"
   }
 }
