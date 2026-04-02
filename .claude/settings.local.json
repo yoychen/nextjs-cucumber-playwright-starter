@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm show:*)",
+      "Bash(npx create-next-app@16 . --typescript --app --eslint --tailwind --src-dir --import-alias \"@/*\" --no-turbopack)"
+    ]
+  }
+}
