@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "npm run test:cucumber",
     "test:cucumber": "NODE_OPTIONS='--import tsx' cucumber-js",
-    "test:cucumber:withserver": "HEADED=true start-server-and-test 'next dev --webpack' http://localhost:3000 test:cucumber",
+    "test:cucumber:dev": "HEADED=true start-server-and-test 'next dev --webpack' http://localhost:3000 test:cucumber",
     "test:cucumber:ci": "COVERAGE=true start-server-and-test 'next build --webpack && next start' http://localhost:3000 test:cucumber"
   },
   "dependencies": {
