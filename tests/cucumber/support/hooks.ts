@@ -1,14 +1,18 @@
-import { Before, After, AfterAll } from "@cucumber/cucumber";
+import { Before, After, BeforeAll, AfterAll } from "@cucumber/cucumber";
 import { chromium } from "@playwright/test";
-import type { Browser, Page } from "@playwright/test";
+import type { Browser, BrowserContext, Page } from "@playwright/test";
 import MCR from "monocart-coverage-reports";
+
+export const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 
 declare module "@cucumber/cucumber" {
   interface World {
-    browser: Browser;
+    context: BrowserContext;
     page: Page;
   }
 }
+
+let browser: Browser;
 
 const mcr = MCR({
   outputDir: "./reports/coverage",
@@ -32,20 +36,25 @@ const mcr = MCR({
   },
 });
 
-Before(async function () {
-  this.browser = await chromium.launch({
+BeforeAll(async function () {
+  browser = await chromium.launch({
     headless: process.env.HEADED !== "true",
   });
-  this.page = await this.browser.newPage();
+});
+
+Before(async function () {
+  this.context = await browser.newContext();
+  this.page = await this.context.newPage();
   await this.page.coverage.startJSCoverage({ resetOnNavigation: false });
 });
 
 After(async function () {
   const coverageList = await this.page.coverage.stopJSCoverage();
   await mcr.add(coverageList);
-  await this.browser?.close();
+  await this.context?.close();
 });
 
 AfterAll(async function () {
+  await browser?.close();
   await mcr.generate();
 });
