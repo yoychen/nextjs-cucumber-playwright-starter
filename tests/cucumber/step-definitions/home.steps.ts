@@ -67,12 +67,44 @@ After(async function () {
     }
   }
 
-  if (Object.keys(allCoverage).length > 0) {
+  // Normalize coverage keys: resolve mangled paths back to real filesystem paths.
+  // v8-to-istanbul produces different path formats depending on the build mode:
+  //   Turbopack prod: .../turbopack:/[project]/project-name/src/app/page.tsx
+  //   Webpack prod:   .../chunks/app/_N_E/src/app/page.tsx
+  //   Webpack dev:    webpack-internal:///(app-pages-browser)/./src/app/page.tsx
+  const projectRoot = process.cwd();
+  const normalized: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(allCoverage)) {
+    let newKey = key;
+
+    // Turbopack production: extract path after [project]/project-name/
+    const turbopackMatch = key.match(/\[project\]\/[^/]+\/(.+)$/);
+    if (turbopackMatch) {
+      newKey = path.resolve(projectRoot, turbopackMatch[1]);
+    }
+    // Webpack production: extract path after _N_E/
+    else if (key.includes('/_N_E/')) {
+      const webpackProdMatch = key.match(/_N_E\/(.+)$/);
+      if (webpackProdMatch) newKey = path.resolve(projectRoot, webpackProdMatch[1]);
+    }
+    // Webpack dev: extract path after (app-pages-browser)/./
+    else if (key.includes('webpack-internal:///')) {
+      const webpackMatch = key.match(/\(app-pages-browser\)\/\.\/(.+)$/);
+      if (webpackMatch) newKey = path.resolve(projectRoot, webpackMatch[1]);
+    }
+
+    // Update the path inside the coverage data object too
+    const entry = value as { path?: string };
+    if (entry.path) entry.path = newKey;
+    normalized[newKey] = entry;
+  }
+
+  if (Object.keys(normalized).length > 0) {
     const outputDir = path.resolve('.nyc_output');
     fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(
       path.join(outputDir, `${randomUUID()}.json`),
-      JSON.stringify(allCoverage)
+      JSON.stringify(normalized)
     );
   }
 

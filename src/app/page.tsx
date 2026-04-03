@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import List from "./List";
 
 export default function Home() {
   const alert = () => {
@@ -18,6 +19,15 @@ export default function Home() {
           height={20}
           priority
         />
+
+        <List
+          items={[
+            { id: 1, label: "Learn Next.js" },
+            { id: 2, label: "Build with TypeScript" },
+            { id: 3, label: "Deploy to Vercel" },
+          ]}
+        />
+
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             To get started, edit the page.tsx file.

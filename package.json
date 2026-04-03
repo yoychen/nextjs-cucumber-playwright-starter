@@ -13,6 +13,7 @@
     "test:e2e:report": "playwright show-report reports/playwright-report",
     "test": "npm run test:cucumber && npm run test:e2e",
     "test:cucumber:withserver": "start-server-and-test 'next dev --webpack' http://localhost:3000 test:cucumber",
+    "test:cucumber:ci": "start-server-and-test 'COVERAGE=true next build --webpack && next start' http://localhost:3000 test:cucumber",
     "coverage:report": "nyc report",
     "coverage:clean": "rm -rf .nyc_output reports/coverage"
   },
