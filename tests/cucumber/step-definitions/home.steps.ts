@@ -13,8 +13,18 @@ declare module '@cucumber/cucumber' {
 const mcr = MCR({
   outputDir: './reports/coverage',
   reports: ['v8', 'console-details', 'html', 'lcovonly'],
+  entryFilter: (entry) => {
+    // Dev: source-mapped webpack-internal entries for our src/ code
+    if (entry.url.startsWith('webpack-internal://')) {
+      return entry.url.includes('/./src/');
+    }
+    // Production: app chunks with hashed names (e.g. page-570d20f13482a506.js)
+    // Dev chunks have no hash (page.js) — skip them since webpack-internal covers the source
+    return /\/_next\/static\/chunks\/app\/.+-[a-f0-9]+\.js$/.test(entry.url);
+  },
   sourceFilter: (sourcePath: string) => {
-    return sourcePath.includes('src/app/') && !sourcePath.includes('node_modules');
+    // Only keep source files under src/, exclude any node_modules
+    return sourcePath.includes('src/') && !sourcePath.includes('node_modules');
   },
 });
 
