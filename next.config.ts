@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: process.env.COVERAGE === "true",
   webpack: (config) => {
     if (process.env.COVERAGE === "true") {
       // Disable minification so V8 coverage can detect branches/functions
