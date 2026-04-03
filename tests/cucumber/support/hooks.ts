@@ -1,9 +1,9 @@
-import { Before, After, AfterAll } from '@cucumber/cucumber';
-import { chromium } from '@playwright/test';
-import type { Browser, Page } from '@playwright/test';
-import MCR from 'monocart-coverage-reports';
+import { Before, After, AfterAll } from "@cucumber/cucumber";
+import { chromium } from "@playwright/test";
+import type { Browser, Page } from "@playwright/test";
+import MCR from "monocart-coverage-reports";
 
-declare module '@cucumber/cucumber' {
+declare module "@cucumber/cucumber" {
   interface World {
     browser: Browser;
     page: Page;
@@ -11,12 +11,12 @@ declare module '@cucumber/cucumber' {
 }
 
 const mcr = MCR({
-  outputDir: './reports/coverage',
-  reports: ['v8', 'console-details', 'html', 'lcovonly'],
+  outputDir: "./reports/coverage",
+  reports: ["v8", "console-details", "html", "lcovonly"],
   entryFilter: (entry) => {
     // Dev: source-mapped webpack-internal entries for our src/ code
-    if (entry.url.startsWith('webpack-internal://')) {
-      return entry.url.includes('/./src/');
+    if (entry.url.startsWith("webpack-internal://")) {
+      return entry.url.includes("/./src/");
     }
     // Production: app chunks with hashed names (e.g. page-570d20f13482a506.js)
     // Dev chunks have no hash (page.js) — skip them since webpack-internal covers the source
@@ -24,16 +24,18 @@ const mcr = MCR({
   },
   sourceFilter: (sourcePath: string) => {
     // Only keep source files under src/, exclude any node_modules
-    return sourcePath.includes('src/') && !sourcePath.includes('node_modules');
+    return sourcePath.includes("src/") && !sourcePath.includes("node_modules");
   },
   sourcePath: (filePath: string) => {
     // Strip _N_E/ prefix from production source map paths
-    return filePath.replace(/^_N_E\//, '');
+    return filePath.replace(/^_N_E\//, "");
   },
 });
 
 Before(async function () {
-  this.browser = await chromium.launch();
+  this.browser = await chromium.launch({
+    headless: process.env.HEADED !== "true",
+  });
   this.page = await this.browser.newPage();
   await this.page.coverage.startJSCoverage({ resetOnNavigation: false });
 });
