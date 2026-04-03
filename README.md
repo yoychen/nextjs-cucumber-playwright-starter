@@ -4,12 +4,11 @@ A starter template for BDD testing [Next.js](https://nextjs.org/) apps with [Cuc
 
 ## Highlights
 
-- **Cucumber BDD** -- Write tests in plain English with Gherkin syntax, then automate with Playwright
-- **V8 Code Coverage** -- Collect real browser coverage via `page.coverage.startJSCoverage()`, no instrumentation needed
-- **Dev & CI Modes** -- Dev mode launches a visible browser with hot reload; CI mode runs a production build headlessly
-- **Consistent Coverage** -- `entryFilter` / `sourceFilter` / `sourcePath` are pre-configured so dev and CI produce the same `src/` report paths
-- **monocart-coverage-reports** -- Generates HTML, LCOV, V8, and console reports from raw V8 data with automatic source map resolution
-- **Browser Reuse** -- Browser launches once per test run; each scenario gets a fresh `BrowserContext` for isolation without the startup cost
+- **Playwright × Cucumber BDD** -- Combines Playwright's browser automation with Cucumber's Gherkin syntax — describe scenarios in plain English, verify them in a real browser
+- **E2E Coverage, Solved** -- The biggest pain point of E2E testing is "tests ran but where's the coverage?" This starter collects native V8 coverage via Playwright's `page.coverage` API and feeds it to monocart-coverage-reports for automatic source map resolution — no instrumentation required. Outputs HTML, LCOV, Cobertura, and more
+- **Consistent Coverage Paths** -- Pre-configured `entryFilter` / `sourceFilter` / `sourcePath` ensure dev mode (webpack-internal) and CI mode (production chunks) produce identical `src/` paths, so reports are directly comparable
+- **CI-Ready Out of the Box** -- Ships with a GitHub Actions workflow that runs tests and uploads reports on every push and PR. LCOV / Cobertura output plugs straight into Codecov, Coveralls, GitLab, and similar platforms
+- **Browser Reuse** -- Launches Chromium once per test run; each scenario gets an isolated BrowserContext for clean state without the startup cost
 
 ## Tech Stack
 
