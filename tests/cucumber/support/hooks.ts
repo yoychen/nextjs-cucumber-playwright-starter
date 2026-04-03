@@ -16,7 +16,7 @@ let browser: Browser;
 
 const mcr = MCR({
   outputDir: "./reports/coverage",
-  reports: ["v8", "console-details", "html", "lcovonly"],
+  reports: ["v8", "console-details", "html", "lcovonly", "cobertura"],
   entryFilter: (entry) => {
     // Dev: source-mapped webpack-internal entries for our src/ code
     if (entry.url.startsWith("webpack-internal://")) {

@@ -65,6 +65,7 @@ After a test run, reports are generated in `reports/coverage/`:
 |--------|------|-------|
 | HTML | `index.html` | Open in browser for interactive exploration |
 | LCOV | `lcov.info` | Upload to Codecov, Coveralls, etc. |
+| Cobertura | `cobertura-coverage.xml` | CI integrations (GitLab, Azure DevOps, Jenkins) |
 | V8 | `coverage-report.json` | Raw V8 data for custom processing |
 | Console | (terminal output) | Quick summary in CI logs |
 
