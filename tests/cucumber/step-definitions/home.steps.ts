@@ -26,6 +26,10 @@ const mcr = MCR({
     // Only keep source files under src/, exclude any node_modules
     return sourcePath.includes('src/') && !sourcePath.includes('node_modules');
   },
+  sourcePath: (filePath: string) => {
+    // Strip _N_E/ prefix from production source map paths
+    return filePath.replace(/^_N_E\//, '');
+  },
 });
 
 Before(async function () {
